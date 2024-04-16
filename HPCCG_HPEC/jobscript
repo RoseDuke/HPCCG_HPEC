@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#SBATCH -J HPCCG_pred           # Job name
+#SBATCH -o HPCCG_pred.o%j       # Name of stdout output file
+#SBATCH -e HPCCG_pred.e%j       # Name of stderr error file
+#SBATCH -p skx-normal      # Queue (partition) name
+#SBATCH -N 32              # Total # of nodes 
+#SBATCH -n 1536              # Total # of mpi tasks
+#SBATCH -t 00:15:00        # Run time (hh:mm:ss)
+#SBATCH --mail-user=username@tacc.utexas.edu
+#SBATCH --mail-type=all    # Send email at begin and end of job
+
+# Other commands must follow all #SBATCH directives...
+
+module list
+pwd
+date
+
+# Set parameters
+
+export I_MPI_JOB_ABORT_SIGNAL=15
+export I_MPI_JOB_SIGNAL_PROPAGATION=1
+export I_MPI_WAIT_MODE=0
+export I_MPI_THREAD_YIELD=2
+export I_MPI_FABRICS=tcp
+export OMP_NUM_THREADS=1
+
+# Launch MPI code... 
+
+LD_PRELOAD=/work2/09806/syang11/work/ross2023_artifact/build/libtimelord_pred_wrapper.so ibrun ./test_HPCCG 100 100 100

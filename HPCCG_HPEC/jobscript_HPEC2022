@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH -J HPCCG_HPEC           # Job name
+#SBATCH -o HPCCG_HPEC.o%j       # Name of stdout output file
+#SBATCH -e HPCCG_HPEC.e%j       # Name of stderr error file
+#SBATCH -p skx             # Queue (partition) name
+#SBATCH -N 4              # Total # of nodes 
+#SBATCH --ntasks-per-node=8
+#SBATCH -t 00:10:00        # Run time (hh:mm:ss)
+#SBATCH --mail-user=username@tacc.utexas.edu
+#SBATCH --mail-type=all    # Send email at begin and end of job
+
+# Other commands must follow all #SBATCH directives...
+
+module list
+pwd
+date
+
+# Set parameters
+
+#export I_MPI_JOB_ABORT_SIGNAL=15
+#export I_MPI_JOB_SIGNAL_PROPAGATION=1
+#export I_MPI_WAIT_MODE=0
+#export I_MPI_THREAD_YIELD=2
+export OMP_NUM_THREADS=1
+#export MKL_NUM_THREADS=12
+# Launch MPI code... 
+
+ibrun ./test_HPCCG 100 100 100
